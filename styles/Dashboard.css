@@ -1,0 +1,36 @@
+html, body {
+	height: 100%;
+	width: 100%;
+}
+
+#bodyCntnr
+{
+	height: 100%;
+	width: 100%;
+}
+
+#graphCntnr 
+{
+	height: 50%;
+	margin-top: 4%;
+}
+
+.line
+{
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1px;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #E3E3E3;;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+    font: 11px helvetica, sans-serif;
+    color: #E3E3E3;
+}

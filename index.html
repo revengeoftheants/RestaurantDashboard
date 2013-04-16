@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" type="text/css" href="styles/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="styles/bootstrap-responsive.min.css">
+	<link rel="stylesheet" type="text/css" href="styles/Dashboard.css">
+	<script type="text/javascript" src="scripts/jquery.v1.9.1.min.js"></script>
+	<script type="text/javascript" src="scripts/d3.v2.min.js"></script>
+	<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+	<script type="text/javascript" src="scripts/DatObjs.js"></script>
+	<script type="text/javascript" src="scripts/moment.v2.0.0.min.js"></script>
+	<script type="text/javascript" src="scripts/GraphBuilder.js"></script>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		GraphBuilder.Load();
+	});
+	</script>
+
+</head>
+
+<body>
+	<div id="bodyCntnr" class="container-fluid">
+		<div id="topCntnr" class="row-fluid"></div>
+			<div id="topMargin"></div>
+			<div class="span1"></div>
+			<div id="graphCntnr" class="span10"></div>
+			<div class="span1"></div>
+		<div id="msgAreaCntnr" class="row-fluid">
+			<div id="msgLogCntnr" class="span6"></div>
+			<div id="msgDisplCntnr" class="span6"></div>
+		</div>
+	</div>
+</body>
+</html>
