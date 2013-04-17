@@ -27,7 +27,9 @@ if (GraphBuilder) {
 
 		// Variables
 		var Me = this
-		   ,mSurveysJSONArray;
+		   ,mSurveysJSONArray
+		   ,mSurveysToDisply
+		   ,mSurveysForReviewArray = new Array();
 
 
 
@@ -70,7 +72,7 @@ if (GraphBuilder) {
 
 					bldGraph(DAY, new Date("2013-04-16 00:00:00"));
 
-					updtBtnData();
+					//updtSurveyLogDispl();
 				},
 				error: function(inpError) { 
 					console.log(inpError.message);
@@ -209,7 +211,7 @@ if (GraphBuilder) {
       		   .style("text-anchor", "middle")
       		   .text("Score");
 
-		    var category = svg.selectAll("circle")
+		    var category = svg.selectAll(".category")
       						  .data(categories)
     						  .enter()
     						  .append("g")
@@ -234,18 +236,163 @@ if (GraphBuilder) {
       					return colorScale(inpCategory.typ);
       				});
 
+
+      		// Update the buttons that display median scores.
+      		updtBtnData(categories);
+
 		};
 
 
 		/*
 		 * Updates the data displayed in the top bottoms.
 		 */
-		var updtBtnData = function() {
-			jQuery("#overallSatisfactionBtn").text("7");
-			jQuery("#recommendationSatisfactionBtn").text("10");
-			jQuery("#foodSatisfactionBtn").text("8");
-			jQuery("#serviceSatisfactionBtn").text("7");
-			jQuery("#cleanlinessBtn").text("7");
-		}
+		var updtBtnData = function(inpSurveysByCategory) {
+
+			var medianScoresByCategory = new Array();
+			var categoryTyp;
+
+			for (var catIdx = 0; catIdx < inpSurveysByCategory.length; catIdx++) {
+				var categorySurveyScores = new Array();
+				for (var surveyIdx = 0; surveyIdx < inpSurveysByCategory[catIdx].values.length; surveyIdx++) {
+					categorySurveyScores.push(inpSurveysByCategory[catIdx].values[surveyIdx].score);
+					categoryTyp = inpSurveysByCategory[catIdx].typ;
+				}
+
+				medianScoresByCategory[categoryTyp] = d3.median(categorySurveyScores);
+			}
+
+			for (var categoryTyp in medianScoresByCategory) {
+				var medianScoreNbr = medianScoresByCategory[categoryTyp];
+
+				switch (parseInt(categoryTyp)) {
+					case OVERALL_SATISFACTION_NBR:
+						jQuery("#overallSatisfactionBtn").text(medianScoreNbr);
+						break;
+					case FOOD_SATISFACTION_NBR:
+						jQuery("#foodSatisfactionBtn").text(medianScoreNbr);
+						break;
+					case SERVICE_SATISFACTION_NBR:
+						jQuery("#serviceSatisfactionBtn").text(medianScoreNbr);
+						break;
+					case CLEANLINESS_NBR:
+						jQuery("#cleanlinessBtn").text(medianScoreNbr);
+						break;
+					case RECOMMENDATION_NBR:
+						jQuery("#recommendationSatisfactionBtn").text(medianScoreNbr);
+				}
+			}
+		};
+
+
+		/*
+		 * Updates the survey log.
+		 */
+		var updtSurveyLogDispl = function() {
+			
+			// Add the surveys that have already been display but still require review.
+			mSurveysToDisply = mSurveysForReviewArray.filter(reviewRequiredForSurvey);
+
+			// Add any new surveys retrieved from the server that also require review.
+			var jsonSurveysToCreateObjsFor = mSurveysJSONArray.filter(reviewRequiredForSurvey);
+
+			var newSurveyObjsForReview = jsonSurveysToCreateObjsFor.forEach(crteSurveyObjForReview);
+			mSurveysToDisply.concat(newSurveyObjsForReview);
+
+			// Finally add any in-scope surveys that do not already exist in the to-display list.
+			jsonSurveysToCreateObjsFor = new Array();
+			var newSurveyId;
+
+			for (var idx = 0; idx < mSurveysJSONArray.length(); idx++) {
+				newSurveyId = mSurveysJSONArray[idx][0];
+
+				// If we haven't already added this survey as a "must review" survey, then
+				// we can add it as a normal survey.
+				if (newSurveyObjsForReview.some() == false) {
+					mSurveysToDisply.push(crteSurveyObj(mSurveysJSONArray[idx]));
+				}
+			}
+		};
+
+
+		 /*
+		  * Array.filter() callback function which returns true if a survey
+		  * meets any of the rules for warranting review.
+		  *
+		  * N.B.: This method can handle both Survey class objects as well as the raw
+		  * JSON retrieved from the server, for which inpArrayElem would be an array of a
+		  * single survey's values.
+		  */
+		 var reviewRequiredForSurvey = function(inpArrayElem, inpIdxNbr, inpArray) {
+		 	var rtnInd = false;
+
+		 	if (inpArrayElem.MatchesReviewRulesInd == null) {
+		 		if (inpArrayElem.OverallSatisfactionNbr < 5) {
+		 			rtnInd = true;
+		 		} else if (inpArrayElem.FoodSatisfactionNbr < 5) {
+		 			rtnInd = true;
+		 		} else if (inpArrayElem.ServiceSatisfactionNbr < 5) {
+		 			rtnInd = true;
+		 		} else if (inpArrayElem.CleanlinessNbr < 5) {
+		 			rtnInd = true;
+		 		} else if (inpArrayElem.RecommendationNbr < 5) {
+		 			rtnInd = true;
+		 		}
+		 	} else {
+		 		if (inpArrayElem.MatchesReviewRulesInd == true && inpArrayElem.ReviewedInd == false) {
+		 			rtnInd = true;
+		 		} else if (inpArrayElem[OVERALL_SATISFACTION_NBR]< 5) {
+		 			rtnInd = true;
+		 		} else if (inpArrayElem[FOOD_SATISFACTION_NBR] < 5) {
+		 			rtnInd = true;
+		 		} else if (inpArrayElem[SERVICE_SATISFACTION_NBR] < 5) {
+		 			rtnInd = true;
+		 		} else if (inpArrayElem[CLEANLINESS_NBR] < 5) {
+		 			rtnInd = true;
+		 		} else if (inpArrayElem[RECOMMENDATION_NBR] < 5) {
+		 			rtnInd = true;
+		 		}
+		 	}
+
+		 	return rtnInd;
+		 };
+
+
+		 /*
+		  * Instantiates a Survey class object out of a JSON element and marks it for review.
+		  */
+		 var crteSurveyObjForReview = function(inpArrayElem, inpIdxNbr, inpArray) {
+		 	var rtnSurvey = crteSurveyObj;
+
+		 	rtnSurvey.MatchesReviewRulesInd = true;
+		 	rtnSurvey.ReviewedInd = false;
+		 }
+
+
+		 /*
+		  * Builds a Survey class object using a JSON representation of that survey.
+		  */
+		 var crteSurveyObj = function(inpJSONSurveyObj) {
+		 	var rtnSurvey = new Survery();
+
+		 	rtnSurvey.IdNbr = inpJSONSurveyObj[0];
+			rtnSurvey.SubmittedTs = inpJSONSurveyObj[1];
+			rtnSurvey.TransactionTs = inpJSONSurveyObj[2];
+			rtnSurvey.CustIdNbr = inpJSONSurveyObj[3];
+			rtnSurvey.CustAgeNbr = inpJSONSurveyObj[4];
+			rtnSurvey.CustGenderTxt = inpJSONSurveyObj[5];
+			rtnSurvey.CustAddrTxt = inpJSONSurveyObj[6];
+			rtnSurvey.OverallSatisfactionNbr = inpJSONSurveyObj[7];
+			rtnSurvey.FoodSatisfactionNbr = inpJSONSurveyObj[8];
+			rtnSurvey.ServiceSatisfactionNbr = inpJSONSurveyObj[9];
+			rtnSurvey.CleanlinessNbr = inpJSONSurveyObj[10];
+			rtnSurvey.RecommendationNbr = inpJSONSurveyObj[11];
+			rtnSurvey.CommentsTxt = inpJSONSurveyObj[12];
+			rtnSurvey.PurchasedItmsTxt = inpJSONSurveyObj[13];
+
+			rtnSurvey.MatchesReviewRulesInd = false;
+		 	rtnSurvey.ReviewedInd = false;
+
+			return rtnSurvey;
+		 }
 	};
 }	
