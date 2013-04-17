@@ -68,7 +68,9 @@ if (GraphBuilder) {
 				success: function(inpSurveysJSONDatObj) {
 					mSurveysJSONArray = inpSurveysJSONDatObj.data;
 
-					bldGraph(DAY, new Date("2013-04-16 00:00:00")); 
+					bldGraph(DAY, new Date("2013-04-16 00:00:00"));
+
+					updtBtnData();
 				},
 				error: function(inpError) { 
 					console.log(inpError.message);
@@ -78,7 +80,7 @@ if (GraphBuilder) {
 
 
 		/*
-		* Loads the page's graph element.
+		* Builds the page's graph element.
 		*/
 		var bldGraph = function (inpTimeDomain, inpStartDate) {
 
@@ -233,5 +235,17 @@ if (GraphBuilder) {
       				});
 
 		};
+
+
+		/*
+		 * Updates the data displayed in the top bottoms.
+		 */
+		var updtBtnData = function() {
+			jQuery("#overallSatisfactionBtn").text("7");
+			jQuery("#recommendationSatisfactionBtn").text("10");
+			jQuery("#foodSatisfactionBtn").text("8");
+			jQuery("#serviceSatisfactionBtn").text("7");
+			jQuery("#cleanlinessBtn").text("7");
+		}
 	};
 }	

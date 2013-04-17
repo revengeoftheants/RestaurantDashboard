@@ -10,7 +10,6 @@
 	<script type="text/javascript" src="scripts/jquery.v1.9.1.min.js"></script>
 	<script type="text/javascript" src="scripts/d3.v2.min.js"></script>
 	<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
-	<script type="text/javascript" src="scripts/DatObjs.js"></script>
 	<script type="text/javascript" src="scripts/moment.v2.0.0.min.js"></script>
 	<script type="text/javascript" src="scripts/GraphBuilder.js"></script>
 
@@ -23,16 +22,24 @@
 </head>
 
 <body>
-	<div id="bodyCntnr" class="container-fluid">
-		<div id="topCntnr" class="row-fluid"></div>
-			<div id="topMargin"></div>
-			<div class="span1"></div>
-			<div id="graphCntnr" class="span10"></div>
-			<div class="span1"></div>
-		<div id="msgAreaCntnr" class="row-fluid">
-			<div id="msgLogCntnr" class="span6"></div>
-			<div id="msgDisplCntnr" class="span6"></div>
+	<div id="topCntnr">
+		<div id="filterCntnr">
+			<div id="btnCntnr">
+				<button id="overallSatisfactionBtn" class="btn"></button>
+				<button id="recommendationSatisfactionBtn" class="btn"></button>
+				<button id="foodSatisfactionBtn" class="btn"></button>
+				<button id="serviceSatisfactionBtn"class="btn"></button>
+				<button id="cleanlinessBtn" class="btn"></button>
+			</div>
 		</div>
+		<div id="graphAndToolsCntnr">
+			<div id="graphCntnr" class="span10"></div>
+			<div class="span2"></div>
+		</div>
+	</div>
+	<div id="bottomCntnr" class="container-fluid">
+		<div id="msgLogCntnr" class="span6"></div>
+		<div id="msgDisplCntnr" class="span6"></div>
 	</div>
 </body>
 </html>
