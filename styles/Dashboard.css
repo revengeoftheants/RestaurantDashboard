@@ -15,11 +15,12 @@ html, body {
 
 #topCntnr {
 	margin-top: 1%;
+	margin-bottom: 1%;
 }
 
 
 #bottomCntnr {
-	margin-top: 10%;
+	margin-top: 8%;
 	margin-bottom: 1%;
 }
 
@@ -39,11 +40,9 @@ html, body {
 }
 
 
-#graphCntnr,
-#toolsCntnr {
+#graphCntnr {
 	height: 100%;
 	padding-left: 5%;
-	display: inline;
 }
 
 
@@ -59,12 +58,11 @@ html, body {
 	font-size: 400%;
 	text-align: center;
 	color: #555555;
-	background-color: #F5F5F5;
-	background-image: -moz-linear-gradient(top, #FFFFFF, #F0CF68);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FFFFFF), to(#F0CF68));
-    background-image: -webkit-linear-gradient(top, #FFFFFF, #F0CF68);
-	background-image: -o-linear-gradient(top, #FFFFFF, #F0CF68);
-	background-image: linear-gradient(to bottom, #FFFFFF, #F0CF68);
+	background-image: -moz-linear-gradient(top, #F0E2BD, #F0CF68);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F0E2BD), to(#F0CF68));
+    background-image: -webkit-linear-gradient(top, #F0E2BD, #F0CF68);
+	background-image: -o-linear-gradient(top, #F0E2BD, #F0CF68);
+	background-image: linear-gradient(to bottom, #F0E2BD, #F0CF68);
 }
 
 .scoreBtn:hover,
@@ -88,12 +86,11 @@ html, body {
 .dropdown-menu > li > a:focus,
 .dropdown-submenu:hover > a,
 .dropdown-submenu:focus > a {
-	background-color: #F2C53D;
-	background-image: -moz-linear-gradient(top, #F0CF68, #F2C53D);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F0CF68), to(#F2C53D));
-	background-image: -webkit-linear-gradient(top, #F0CF68, #F2C53D);
-	background-image: -o-linear-gradient(top, #F0CF68, #F2C53D);
-	background-image: linear-gradient(to bottom, #F0CF68, #F2C53D);
+	background-image: -moz-linear-gradient(top, #F0E2BD, #F2C53D);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F0E2BD), to(#F2C53D));
+	background-image: -webkit-linear-gradient(top, #F0E2BD, #F2C53D);
+	background-image: -o-linear-gradient(top, #F0E2BD, #F2C53D);
+	background-image: linear-gradient(to bottom, #F0E2BD, #F2C53D);
 }
 
 .dropdown-menu > li > a:active, {
@@ -125,11 +122,11 @@ html, body {
 
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
-	background-image: -moz-linear-gradient(top, #F0CF68, #F2C53D);
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F0CF68), to(#F2C53D));
-	background-image: -webkit-linear-gradient(top, #F0CF68, #F2C53D);
-	background-image: -o-linear-gradient(top, #F0CF68, #F2C53D);
-	background-image: linear-gradient(to bottom, #F0CF68, #F2C53D);
+	background-image: -moz-linear-gradient(top, #F0E2BD, #F2C53D);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F0E2BD), to(#F2C53D));
+	background-image: -webkit-linear-gradient(top, #F0E2BD, #F2C53D);
+	background-image: -o-linear-gradient(top, #F0E2BD, #F2C53D);
+	background-image: linear-gradient(to bottom, #F0E2BD, #F2C53D);
 }
 
 
