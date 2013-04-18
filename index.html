@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="scripts/d3.v2.min.js"></script>
 	<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
 	<script type="text/javascript" src="scripts/moment.v2.0.0.min.js"></script>
+	<script type="text/javascript" src="scripts/DatObjs.js"></script>
 	<script type="text/javascript" src="scripts/GraphBuilder.js"></script>
 
 	<script type="text/javascript">
@@ -25,20 +26,37 @@
 	<div id="topCntnr">
 		<div id="filterCntnr">
 			<div id="btnCntnr">
-				<button id="overallSatisfactionBtn" class="btn"></button>
-				<button id="recommendationSatisfactionBtn" class="btn"></button>
-				<button id="foodSatisfactionBtn" class="btn"></button>
-				<button id="serviceSatisfactionBtn"class="btn"></button>
-				<button id="cleanlinessBtn" class="btn"></button>
+				<button id="overallSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+				<button id="recommendationSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+				<button id="foodSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+				<button id="serviceSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+				<button id="cleanlinessBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
 			</div>
 		</div>
 		<div id="graphAndToolsCntnr">
 			<div id="graphCntnr" class="span10"></div>
-			<div class="span2"></div>
+			<div id="toolsCntnr" class="span1 btn-group">
+				<a id="timeScaleDropDown" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+    				Time Scale
+    				<span class="caret"></span>
+  				</a>
+				<ul class="dropdown-menu">
+    				<!-- dropdown menu links -->
+    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Day</a></li>
+    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Week</a></li>
+    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Month</a></li>
+    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Year</a></li>
+  				</ul>
+			</div>
+			<div class="span1"></div>
 		</div>
 	</div>
-	<div id="bottomCntnr" class="container-fluid">
-		<div id="msgLogCntnr" class="span6"></div>
+	<div id="bottomCntnr">
+		<div id="msgLogCntnr" class="span6">
+			<table id="surveyTbl" class="table table-hover">
+				<tbody><!-- This tbody is required for Bootstrap's table row hover over functionality. --></tbody>
+			</table>
+		</div>
 		<div id="msgDisplCntnr" class="span6"></div>
 	</div>
 </body>

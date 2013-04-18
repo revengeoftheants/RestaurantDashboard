@@ -1,7 +1,7 @@
 function Survey () {
 	
 	// Survey data.
-	this.IdNbr;
+	this.Id;
 	this.SubmittedTs;
 	this.TransactionTs;
 	this.CustIdNbr;

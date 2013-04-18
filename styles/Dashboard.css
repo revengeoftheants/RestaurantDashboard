@@ -9,15 +9,23 @@ html, body {
 
 #topCntnr,
 #bottomCntnr {
-	height: 50%;
+	height: 45%;
 	width: 100%;
+}
+
+#topCntnr {
 	margin-top: 1%;
+}
+
+
+#bottomCntnr {
+	margin-top: 10%;
 	margin-bottom: 1%;
 }
 
 #filterCntnr {
 	width: 100%;
-	padding-left: 15%;
+	padding-left: 10%;
 }
 
 #graphAndToolsCntnr {
@@ -25,12 +33,25 @@ html, body {
 	margin-top: 0.5%;
 }
 
-#graphCntnr {
+
+#timeScaleDropDown {
+	color: #555555;
+}
+
+
+#graphCntnr,
+#toolsCntnr {
 	height: 100%;
+	padding-left: 5%;
+	display: inline;
+}
+
+
+#msgLogCntnr {
 	padding-left: 5%;
 }
 
-.btn {
+.scoreBtn {
 	height: 60px;
 	width: 60px;
 	margin-right: 3%;
@@ -38,23 +59,94 @@ html, body {
 	font-size: 400%;
 	text-align: center;
 	color: #555555;
+	background-color: #F5F5F5;
+	background-image: -moz-linear-gradient(top, #FFFFFF, #F0CF68);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FFFFFF), to(#F0CF68));
+    background-image: -webkit-linear-gradient(top, #FFFFFF, #F0CF68);
+	background-image: -o-linear-gradient(top, #FFFFFF, #F0CF68);
+	background-image: linear-gradient(to bottom, #FFFFFF, #F0CF68);
 }
 
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1px;
+.scoreBtn:hover,
+.scoreBtn.active {
+	color: #FFFFFF;
+	background-color: #F2C53D;
+	background-image: none;
 }
+
+
+.caret {
+	border-top: 4px solid #555555; /*Sets the carat's color.*/
+}
+
+
+.dropdown-menu > li > a {
+	color: #555555;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+	background-color: #F2C53D;
+	background-image: -moz-linear-gradient(top, #F0CF68, #F2C53D);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F0CF68), to(#F2C53D));
+	background-image: -webkit-linear-gradient(top, #F0CF68, #F2C53D);
+	background-image: -o-linear-gradient(top, #F0CF68, #F2C53D);
+	background-image: linear-gradient(to bottom, #F0CF68, #F2C53D);
+}
+
+.dropdown-menu > li > a:active, {
+	background-color: #F2C53D;
+}
+
+
+.line {
+	fill: none;
+	stroke: steelblue;
+	stroke-width: 1px;
+}
+
 
 .axis path,
 .axis line {
-  fill: none;
-  stroke: #E3E3E3;;
-  stroke-width: 2px;
-  shape-rendering: crispEdges;
+	fill: none;
+	stroke: #E3E3E3;;
+	stroke-width: 2px;
+	shape-rendering: crispEdges;
 }
+
 
 .axis text {
     font-size: 11px;
     color: #E3E3E3;
+}
+
+
+.table-hover tbody tr:hover > td,
+.table-hover tbody tr:hover > th {
+	background-image: -moz-linear-gradient(top, #F0CF68, #F2C53D);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F0CF68), to(#F2C53D));
+	background-image: -webkit-linear-gradient(top, #F0CF68, #F2C53D);
+	background-image: -o-linear-gradient(top, #F0CF68, #F2C53D);
+	background-image: linear-gradient(to bottom, #F0CF68, #F2C53D);
+}
+
+
+.table tbody tr.error > td {
+	background-image: -moz-linear-gradient(top, #FEBAB1, #EE8B7F);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#FEBAB1), to(#EE8B7F));
+	background-image: -webkit-linear-gradient(top, #FEBAB1, #EE8B7F);
+	background-image: -o-linear-gradient(top, #FEBAB1, #EE8B7F);
+	background-image: linear-gradient(to bottom, #FEBAB1, #EE8B7F);
+	/*background-image: none;
+	background-color: #EE8B7F;*/
+}
+
+.table-hover tbody tr.error:hover > td {
+	background-image: -moz-linear-gradient(top, #EE8B7F, #BD3E37);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EE8B7F), to(#BD3E37));
+	background-image: -webkit-linear-gradient(top, #EE8B7F, #BD3E37);
+	background-image: -o-linear-gradient(top, #EE8B7F, #BD3E37);
+	background-image: linear-gradient(to bottom, #EE8B7F, #BD3E37);
 }
