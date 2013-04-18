@@ -291,7 +291,7 @@ if (GraphBuilder) {
 					categoryTyp = inpSurveysByCategory[catIdx].typ;
 				}
 
-				medianScoresByCategory[categoryTyp] = d3.median(categorySurveyScores);
+				medianScoresByCategory[categoryTyp] = Math.round(d3.median(categorySurveyScores));
 			}
 
 			for (var categoryTyp in medianScoresByCategory) {

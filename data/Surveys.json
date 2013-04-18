@@ -2,9 +2,26 @@ jsonCallback (
 {
 "data" : 
 [
-  ["1","4/16/2013 9:58:00","4/16/2013 9:23:00","3784387","42","Male","1234 Oak Street, Milwaukee, WI 12345","8","8","7","7","8","The front counter was messy and no employee seemed to care.","1 medium coffee | 1 Mornin' Flatbread | 1 English Muffin Melt"],
-  ["2","4/16/2013 19:14:00","4/16/2013 11:44:00","938034","33","Female","777 Lucky Avenue, Chicago, IL 60622","7","7","7","5","7","","1 medium Coca-cola | 2 small Sprites | 1 12-inch Spicy Italian | 1 12-inch Cold-cut Combo | 1 Chips | 2 Cookies"],
-  ["3","4/16/2013 12:33:00","4/16/2013 12:11:00","344242","22","Female","4836 Armitage Avenue, Chicago, IL 60639","1","1","1","1","1","","1 medium Coca-cola | 1 6-inch Turkey Breast | 1 Chips"]
+  [1,"4/16/2013 9:58:00","4/16/2013 9:23:00","3,784,387",42,"Male","1234 Oak Street, Milwaukee, WI 12345",8,8,7,7,8,"The front counter was messy and no employee seemed to care.","1 medium coffee | 1 Mornin' Flatbread | 1 English Muffin Melt"],
+  [2,"4/16/2013 19:14:00","4/16/2013 11:44:00","938,034",33,"Female","777 Lucky Avenue, Chicago, IL 60622",7,7,7,5,7,"N/A","1 medium Coca-cola | 2 small Sprites | 1 12-inch Spicy Italian | 1 12-inch Cold-cut Combo | 1 Chips | 2 Cookies"],
+  [3,"4/16/2013 12:33:00","4/16/2013 12:11:00","344,242",22,"Female","4836 Armitage Avenue, Chicago, IL 60639",1,1,1,1,1,"N/A","1 medium Coca-cola | 1 6-inch Turkey Breast | 1 Chips"],
+  [4,"4/16/2013 7:38:49","4/16/2013 7:24:25","394,832",25,"Male","1450 W Chicago Avenue, Chicago, IL 60642",6,5,7,6,5,"N/A","1 coffee, 1 12-inch egg and cheese, 1 water"],
+  [5,"4/16/2013 8:50:49","4/16/2013 8:36:25","402,021",19,"Female","2500 N Clark St Chicago, IL 60614",8,8,8,7,6,"N/A","1 diet coke, 1 6-inch veggie delight"],
+  [6,"4/16/2013 9:19:37","4/16/2013 9:05:13","730,103",39,"Male","2900 N LaSalle St Chicago, IL 60614",4,4,4,5,6,"N/A","1 medium sprite, 1 6-inch veggie delight, 1 chips"],
+  [7,"4/16/2013 11:14:49","4/16/2013 11:00:25","774,211",47,"Male","1800 S Halsted St Chicago, IL 60608",5,5,6,4,5,"not enough sauce","2 chips, 1 12-inch smokehouse bbq chicken, 1 large diet coke"],
+  [8,"4/16/2013 12:26:49","4/16/2013 12:12:25","782,141",34,"Female","900 S Wabash Ave Chicago, IL 60605",8,9,7,6,7,"N/A","1 6-inch black forest ham, 1 chips, 1 water"],
+  [9,"4/16/2013 14:22:01","4/16/2013 14:07:37","871,411",27,"Male","500 W Hubbard St Chicago, IL 60654",9,10,8,8,10,"I love this place","1 coke, 1 12-inch B.L.T., 1 chips"],
+  [10,"4/16/2013 16:02:49","4/16/2013 15:48:25","881,914",25,"Female","150 E Ontario St Chicago, IL 60611",3,4,1,5,3,"Cashier was very rude","1 medium diet coke, 1 6-inch over roasted chicken"],
+  [11,"4/17/2013 4:15:35","4/17/2013 4:01:11","882,392",35,"Male","3150 N Broadway St Chicago, IL 60657",8,9,6,7,8,"N/A","1 6-inch B.L.T"],
+  [12,"4/17/2013 4:26:43","4/17/2013 4:12:19","883,187",23,"Male","425 W Barry Ave Chicago, IL 60657",7,7,6,6,6,"N/A","1 water, 1 12-inch Spicy Italian"],
+  [13,"4/17/2013 6:18:17","4/17/2013 6:03:53","883,548",30,"Female","1300 S Indiana Ave Chicago, IL 60605",5,5,5,6,7,"N/A","1 6-inch subway club, 1 chips, 1 diet coke"],
+  [14,"4/17/2013 7:45:19","4/17/2013 7:30:55","883,694",41,"Male","1080 W Wrightwood Ave Chicago, IL 60614",6,5,5,3,5,"N/A","1 chips, 1 coke, 1 12-inch big philly cheesesteak"],
+  [15,"4/17/2013 9:49:19","4/17/2013 9:34:55","884,193",25,"Female","810 W Wellington Ave Chicago, IL 60657",7,7,7,6,7,"N/A","1 6-inch tuna, 1 water"],
+  [16,"4/17/2013 10:39:42","4/17/2013 10:25:18","884,637",22,"Female","400 S Green St Chicago, IL 60607",9,8,7,4,8,"bathroom was kinda gross","1 12-inch spicy italian"],
+  [17,"4/17/2013 12:31:51","4/17/2013 12:17:27","885,594",36,"Male","1650 N LaSalle St Chicago, IL 60614",7,6,5,7,6,"N/A","1 6-inch turkey breast, 1 chips, 1 coke"],
+  [18,"4/17/2013 13:24:59","4/17/2013 13:10:35","886,012",19,"Male","900 N LaSalle St Chicago, IL 60610",5,5,7,4,6,"N/A","1 chips, 1 6-inch roast beef"],
+  [19,"4/17/2013 13:48:45","4/17/2013 13:34:21","886,784",21,"Male","800 W Fulton Market Chicago, IL 60607",3,3,6,4,2,"meatballs were burnt","1 chips, 1 12-inch meatball marinara, 1 coke"],
+  [20,"4/17/2013 16:27:09","4/17/2013 16:44:25","890,151",50,"Female","1350 N State Pkwy Chicago, IL 60610",6,7,4,4,6,"rude cashier","1 12-inch tuna, 1 water"]
 ]
 }
 );
