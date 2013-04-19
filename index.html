@@ -23,40 +23,43 @@
 </head>
 
 <body>
-	<div id="topCntnr">
-		<div id="filterCntnr">
-			<div id="btnCntnr">
-				<button id="overallSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
-				<button id="recommendationSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
-				<button id="foodSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
-				<button id="serviceSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
-				<button id="cleanlinessBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+	<div id="leftMargin" class="span1"></div>
+	<div id="centerCol" class="span11">
+		<div id="topCntnr" class="row-fluid">
+			<div id="filterCntnr">
+				<div id="btnCntnr">
+					<button id="overallSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+					<button id="recommendationSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+					<button id="foodSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+					<button id="serviceSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+					<button id="cleanlinessBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+				</div>
+			</div>
+			<div id="graphAndToolsCntnr">
+				<div id="graphCntnr" class="span9"></div>
+				<div id="toolsCntnr" class="span2 btn-group">
+					<a id="timeScaleDropDown" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+	    				Time Scale
+	    				<span class="caret"></span>
+	  				</a>
+					<ul class="dropdown-menu">
+	    				<!-- dropdown menu links -->
+	    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Day</a></li>
+	    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Week</a></li>
+	    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Month</a></li>
+	    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Year</a></li>
+	  				</ul>
+				</div>
 			</div>
 		</div>
-		<div id="graphAndToolsCntnr">
-			<div id="graphCntnr" class="span10"></div>
-			<div id="toolsCntnr" class="span2 btn-group">
-				<a id="timeScaleDropDown" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-    				Time Scale
-    				<span class="caret"></span>
-  				</a>
-				<ul class="dropdown-menu">
-    				<!-- dropdown menu links -->
-    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Day</a></li>
-    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Week</a></li>
-    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Month</a></li>
-    				<li class="tmScaleItm"><a href="#" onclick="GraphBuilder.UpdtTimeScale(event)">Year</a></li>
-  				</ul>
+		<div id="bottomCntnr" class="row-fluid">
+			<div id="msgLogCntnr">
+				<table id="surveyTbl" class="table table-hover">
+					<tbody><!-- This tbody is required for Bootstrap's table row hover over functionality. --></tbody>
+				</table>
 			</div>
+			<div id="msgDisplCntnr"></div>
 		</div>
-	</div>
-	<div id="bottomCntnr">
-		<div id="msgLogCntnr" class="span6">
-			<table id="surveyTbl" class="table table-hover">
-				<tbody><!-- This tbody is required for Bootstrap's table row hover over functionality. --></tbody>
-			</table>
-		</div>
-		<div id="msgDisplCntnr" class="span6"></div>
 	</div>
 </body>
 </html>

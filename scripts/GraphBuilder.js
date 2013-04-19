@@ -42,7 +42,9 @@ if (GraphBuilder) {
 		*/
 		Me.Load = function () {
 
-			//Load our data.
+			setDynamicStyles();
+
+			// Load our data.
 			loadData();
 		};
 
@@ -80,6 +82,15 @@ if (GraphBuilder) {
 		/*
 		Private Methods
 		*/
+
+		var setDynamicStyles = function() {
+			var btn = jQuery(".scoreBtn");
+			var hghtNbr = btn.height();
+
+			btn.css("width", hghtNbr);
+			btn.css("font-size", Math.round(hghtNbr * 0.8));
+		};
+
 
 		/*
 		* Retrieves and parses the JSON data, loading them into objects.
