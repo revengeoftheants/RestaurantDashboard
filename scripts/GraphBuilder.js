@@ -81,6 +81,26 @@ if (GraphBuilder) {
 
 
 		/*
+		 * Opens the requested survey.
+		 */
+		Me.OpenSurvey = function(inpEvent) {
+
+			var slctedSurveyRow = jQuery(inpEvent.target).parent();
+			//var slctedSurveyRowCells = slctedSurveyRow.
+
+			if (slctedSurveyRow.hasClass("selected")) {
+				// This survey is already selected.
+			} else {
+				// This button is being selected. Removed the "selected" class from all other rows and then
+				// add it to this one to highlight it.
+				slctedSurveyRow.parent().children().removeClass("selected");
+				slctedSurveyRow.addClass("selected");
+			}	
+		}
+
+
+
+		/*
 		Private Methods
 		*/
 
@@ -371,13 +391,11 @@ if (GraphBuilder) {
 
 			for (var idx = 0; idx < mSurveysToDispl.length; idx++) {
 				var currSurvey = mSurveysToDispl[idx];
-				var tblRowHtmlTxt;
+				var tblRowHtmlTxt = '<tr data-surveyid=' + currSurvey.Id + ' onClick="GraphBuilder.OpenSurvey(event)"';
 
 				// If this survey needs to be reviewed, mark it with Bootstrap's error class.
 				if (currSurvey.MatchesReviewRulesInd == true && currSurvey.ReviewedInd == false) {
-					tblRowHtmlTxt = '<tr class="error">';
-				} else {
-					tblRowHtmlTxt = "<tr>";
+					tblRowHtmlTxt += 'class="error"';
 				}
 
 				var ts = new moment(currSurvey.TransactionTs);
@@ -393,7 +411,7 @@ if (GraphBuilder) {
 					commentTxt = "";
 				}
 
-				tblRowHtmlTxt += "<td>" + tsTxt + "</td><td>" + scoresTxt +"</td><td>" + commentTxt +"</td></tr>";
+				tblRowHtmlTxt += "><td>" + tsTxt + "</td><td>" + scoresTxt +"</td><td>" + commentTxt +"</td></tr>";
 				surveyTblTBody.append(tblRowHtmlTxt);
 			}
 		};

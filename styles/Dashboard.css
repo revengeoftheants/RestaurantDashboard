@@ -207,7 +207,7 @@ html, body {
 
 
 .table-hover tbody tr:hover > td,
-.table-hover tbody tr:hover > th {
+.table tbody tr.selected > td {
 	background-image: -moz-linear-gradient(top, #F0E2BD, #F2C53D);
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F0E2BD), to(#F2C53D));
 	background-image: -webkit-linear-gradient(top, #F0E2BD, #F2C53D);
@@ -226,7 +226,8 @@ html, body {
 }
 
 
-.table-hover tbody tr.error:hover > td {
+.table-hover tbody tr.error:hover > td,
+.table tbody tr.error.selected > td {
 	background-image: -moz-linear-gradient(top, #EE8B7F, #BD3E37);
 	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#EE8B7F), to(#BD3E37));
 	background-image: -webkit-linear-gradient(top, #EE8B7F, #BD3E37);
