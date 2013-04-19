@@ -22,6 +22,7 @@ if (GraphBuilder) {
 
 		var CATEGORY_TYPS = new Array(OVERALL_SATISFACTION_NBR, FOOD_SATISFACTION_NBR,
 									  SERVICE_SATISFACTION_NBR, CLEANLINESS_NBR, RECOMMENDATION_NBR)
+		   ,SPACE_2 = "&nbsp;&nbsp;"
 		   ,HOUR_TICK_LBLS = new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23);
 
 
@@ -379,7 +380,20 @@ if (GraphBuilder) {
 					tblRowHtmlTxt = "<tr>";
 				}
 
-				tblRowHtmlTxt += "<td>" + currSurvey.Id + "</td><td>stuff</td></tr>";
+				var ts = new moment(currSurvey.TransactionTs);
+				var tsTxt = ts.format("YYYY-MM-DD HH:mm");
+
+				var scoresTxt = currSurvey.OverallSatisfactionNbr + SPACE_2 + currSurvey.FoodSatisfactionNbr + SPACE_2 +
+								currSurvey.ServiceSatisfactionNbr + SPACE_2 + currSurvey.CleanlinessNbr + SPACE_2 +
+								currSurvey.RecommendationNbr;
+
+				var commentTxt = currSurvey.CommentsTxt.substr(0,34);
+
+				if (commentTxt == "N/A") {
+					commentTxt = "";
+				}
+
+				tblRowHtmlTxt += "<td>" + tsTxt + "</td><td>" + scoresTxt +"</td><td>" + commentTxt +"</td></tr>";
 				surveyTblTBody.append(tblRowHtmlTxt);
 			}
 		};

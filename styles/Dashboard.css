@@ -119,10 +119,11 @@ html, body {
 
 .scoreBtn {
 	height: 100%;
-	/* We want the button's width to be equal to its height, so we'll calculate and set that in javascript */
+	/* We want the button's width to be equal to its height, so we'll calculate and set that in javascript.
+	 * Same for the font size.
+	 */
 	margin-right: 3%;
 	padding: 0%;
-	/*font-size: 400%;*/
 	text-align: center;
 	color: #555555;
 	background-image: -moz-linear-gradient(top, #F0E2BD, #F0CF68);
@@ -190,13 +191,18 @@ html, body {
 
 
 .axis text {
-    font-size: 11px;
+    font-size: 100%;
     color: #E3E3E3;
 }
 
 
 .table {
 	height: 100%;
+	font-size: 125%;
+}
+
+.table-condensed td {
+	padding-left: 4%;
 }
 
 
@@ -207,6 +213,7 @@ html, body {
 	background-image: -webkit-linear-gradient(top, #F0E2BD, #F2C53D);
 	background-image: -o-linear-gradient(top, #F0E2BD, #F2C53D);
 	background-image: linear-gradient(to bottom, #F0E2BD, #F2C53D);
+	color: #FFFFFF;
 }
 
 
@@ -216,9 +223,8 @@ html, body {
 	background-image: -webkit-linear-gradient(top, #FEBAB1, #EE8B7F);
 	background-image: -o-linear-gradient(top, #FEBAB1, #EE8B7F);
 	background-image: linear-gradient(to bottom, #FEBAB1, #EE8B7F);
-	/*background-image: none;
-	background-color: #EE8B7F;*/
 }
+
 
 .table-hover tbody tr.error:hover > td {
 	background-image: -moz-linear-gradient(top, #EE8B7F, #BD3E37);
@@ -226,4 +232,5 @@ html, body {
 	background-image: -webkit-linear-gradient(top, #EE8B7F, #BD3E37);
 	background-image: -o-linear-gradient(top, #EE8B7F, #BD3E37);
 	background-image: linear-gradient(to bottom, #EE8B7F, #BD3E37);
+	color: #FFFFFF;
 }
