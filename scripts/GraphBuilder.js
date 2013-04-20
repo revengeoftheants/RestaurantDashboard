@@ -86,15 +86,85 @@ if (GraphBuilder) {
 		Me.OpenSurvey = function(inpEvent) {
 
 			var slctedSurveyRow = jQuery(inpEvent.target).parent();
-			//var slctedSurveyRowCells = slctedSurveyRow.
+			
+			// Retrieve this survey.
+			var surveyId = slctedSurveyRow.data("surveyid");
+			var idx = 0;
+			var surveyObj = null;
+
+			while (idx < mSurveysToDispl.length && surveyObj == null) {
+				surveyObj = mSurveysToDispl[idx];
+
+				if (surveyObj.Id == surveyId) {
+					// We have the correct object.
+				} else {
+					surveyObj = null;
+					idx++;
+				}
+			}
 
 			if (slctedSurveyRow.hasClass("selected")) {
-				// This survey is already selected.
+				// This survey is already selected, so the user wants to close it.
+				slctedSurveyRow.removeClass("selected");
+				
+				jQuery("#msgDisplCntnr").css("visibility", "hidden");
+
 			} else {
-				// This button is being selected. Removed the "selected" class from all other rows and then
-				// add it to this one to highlight it.
+				// This button is being selected. Removed the "selected" class from all other rows and 
 				slctedSurveyRow.parent().children().removeClass("selected");
+
+				// Highlight the selected survey and display its information.
 				slctedSurveyRow.addClass("selected");
+
+				var ts = new moment(surveyObj.TransactionTs);
+				var tsTxt = ts.format("YYYY-MM-DD HH:mm");
+				var purchasedItms = surveyObj.PurchasedItmsTxt.split(" | ");
+				var purchasedItmsTxt = "";
+
+				for (var idx = 0; idx < purchasedItms.length; idx++) {
+					if (idx < purchasedItms.length - 2) {
+						purchasedItmsTxt += purchasedItms[idx] + ", ";
+					} else if (idx == purchasedItms.length - 2) {
+						purchasedItmsTxt += purchasedItms[idx] + ", and ";
+					} else {
+						purchasedItmsTxt += purchasedItms[idx];
+					}
+				}
+
+				jQuery("#survCust td:last-child").text(surveyObj.CustGenderTxt);
+				jQuery("#survDate td:last-child").text(tsTxt);
+				jQuery("#survItms td:last-child").text(purchasedItmsTxt);
+				jQuery("#survComm td:last-child").text(surveyObj.CommentsTxt);
+
+				jQuery("#scrOverall td:last-child").text(surveyObj.OverallSatisfactionNbr);
+				jQuery("#scrFood td:last-child").text(surveyObj.FoodSatisfactionNbr);
+				jQuery("#scrServ td:last-child").text(surveyObj.ServiceSatisfactionNbr);
+				jQuery("#scrClean td:last-child").text(surveyObj.CleanlinessNbr);
+				jQuery("#scrRec td:last-child").text(surveyObj.RecommendationNbr);
+
+				jQuery("#msgDisplCntnr").css("visibility", "visible");
+
+				/*
+				var msgDisplHtmlTxt = '<table><tr><td>Customer:</td><td>' + surveyObj.CustGenderTxt + '</td></tr>';
+				msgDisplHtmlTxt += '<tr><td>Date:</td><td>' + tsTxt + '</td></tr>';
+				msgDisplHtmlTxt += '<tr><td>Items:</td><td>' + purchasedItmsTxt + '</td></tr>';
+
+				msgDisplHtmlTxt += '<table><'
+				*/
+
+				/*
+				var msgDisplHtmlTxt = '<div id="paraCntnr"><p class="section">Customer:' + SPACE_2 + '<span>' + surveyObj.CustGenderTxt + '</span></p>';
+				msgDisplHtmlTxt += '<p class="section">Items:' + SPACE_2 + '<span>' + purchasedItmsTxt + '</span></p>';
+				msgDisplHtmlTxt += '<p id="scoresPara" class="section">Scores:</p>';
+				msgDisplHtmlTxt += '<table><tr><td>Overall:</td><td>' + surveyObj.OverallSatisfactionNbr + '</td></tr>';
+				msgDisplHtmlTxt += '<tr><td>Food:</td><td>' + surveyObj.FoodSatisfactionNbr + '</td></tr>';
+				msgDisplHtmlTxt += '<tr><td>Service:</td><td>' + surveyObj.ServiceSatisfactionNbr + '</td></tr>';
+				msgDisplHtmlTxt += '<tr><td>Cleanliness:</td><td>' + surveyObj.CleanlinessNbr + '</td></tr>';
+				msgDisplHtmlTxt += '<tr><td>Recommend:</td><td>' + surveyObj.RecommendationNbr + '</td></tr></table>';
+				msgDisplHtmlTxt += '<p class="section">Comments:' + SPACE_2 + '<span>' + surveyObj.CommentsTxt + '</span></p></div>';
+
+				msgDisplCntnr.append(msgDisplHtmlTxt);
+				*/
 			}	
 		}
 
@@ -405,7 +475,7 @@ if (GraphBuilder) {
 								currSurvey.ServiceSatisfactionNbr + SPACE_2 + currSurvey.CleanlinessNbr + SPACE_2 +
 								currSurvey.RecommendationNbr;
 
-				var commentTxt = currSurvey.CommentsTxt.substr(0,34);
+				var commentTxt = currSurvey.CommentsTxt.substr(0, 29);
 
 				if (commentTxt == "N/A") {
 					commentTxt = "";
