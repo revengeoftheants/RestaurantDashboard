@@ -28,11 +28,11 @@
 		<div id="topCntnr" class="row-fluid">
 			<div id="filterCntnr">
 				<div id="btnCntnr">
-					<button id="overallSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
-					<button id="recommendationSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
-					<button id="foodSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
-					<button id="serviceSatisfactionBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
-					<button id="cleanlinessBtn" type="button" class="btn scoreBtn" data-toggle="button" onclick="GraphBuilder.UpdtGraphDisplCategories(event)"></button>
+					<button id="overallSatisfactionBtn" type="button" class="btn scoreBtn" onclick="GraphBuilder.ToggleTimeseriesCategory(event)"></button>
+					<button id="recommendationBtn" type="button" class="btn scoreBtn" onclick="GraphBuilder.ToggleTimeseriesCategory(event)"></button>
+					<button id="foodSatisfactionBtn" type="button" class="btn scoreBtn" onclick="GraphBuilder.ToggleTimeseriesCategory(event)"></button>
+					<button id="serviceSatisfactionBtn" type="button" class="btn scoreBtn" onclick="GraphBuilder.ToggleTimeseriesCategory(event)"></button>
+					<button id="cleanlinessBtn" type="button" class="btn scoreBtn" onclick="GraphBuilder.ToggleTimeseriesCategory(event)"></button>
 				</div>
 			</div>
 			<div id="graphAndToolsCntnr">
@@ -61,13 +61,6 @@
 			<div id="msgDisplCntnr">
 				<table id="surveyDisplTbl">
 					<tbody>
-						<!--
-						<colgroup>
-							<col width="30%"></col>
-							<col width="10%"></col>
-							<col width="60%"></col>
-						</colgroup>
-					-->
 						<tr id="survCust"><td>Customer:</td><td></td></tr>
 						<tr id="survDate"><td>Date:</td><td></td></tr>
 						<tr id="survItms"><td>Items:</td><td></td></tr>

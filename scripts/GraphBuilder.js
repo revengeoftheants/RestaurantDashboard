@@ -7,30 +7,34 @@ if (GraphBuilder) {
 		// Constants
 
 		// JSON column indices
-		var TRANSACTION_TS = 2
+		var SURVEY_ID = 0
+		   ,TRANSACTION_TS = 2
 		   ,OVERALL_SATISFACTION_NBR = 7
 		   ,FOOD_SATISFACTION_NBR = 8
 		   ,SERVICE_SATISFACTION_NBR = 9
 		   ,CLEANLINESS_NBR = 10
 		   ,RECOMMENDATION_NBR = 11
-
-		// Timeframe types
-		var DAY = 1
+			// Timeframe types
+		   ,DAY = 1
 		   ,WEEK = 2
 		   ,MONTH = 3
-		   ,YEAR = 4;
-
-		var CATEGORY_TYPS = new Array(OVERALL_SATISFACTION_NBR, FOOD_SATISFACTION_NBR,
-									  SERVICE_SATISFACTION_NBR, CLEANLINESS_NBR, RECOMMENDATION_NBR)
+		   ,YEAR = 4
+		   // Other 
+		   ,CATEGORY_TYPS = {7:"Overall", 8:"Food", 9:"Service", 10:"Clean", 11:"Rec"}
 		   ,SPACE_2 = "&nbsp;&nbsp;"
-		   ,HOUR_TICK_LBLS = new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23);
+		   ,HOUR_TICK_LBLS = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+		   ,ORIG_CIRCLE_RAD_NBR = 3
+		   ,BIG_CIRCLE_RAD_NBR = 5;
 
 
 		// Variables
 		var Me = this
 		   ,mSurveysJSONArray
 		   ,mSurveysToDispl
-		   ,mSurveysForReviewArray = new Array();
+		   ,mSurveysForReviewArray = []
+		   ,parseDate = d3.time.format("%m/%d/%Y %H:%M:%S").parse
+		   ,mXScale
+		   ,mYLScale;
 
 
 
@@ -51,21 +55,6 @@ if (GraphBuilder) {
 
 
 		/*
-		 * Updates the categories displayed on the graph.
-		 */
-		Me.UpdtGraphDisplCategories = function(inpEvent) {
-
-			var clickedScoreBtn = jQuery(inpEvent.target);
-
-			if (clickedScoreBtn.hasClass("active")) {
-				// This button is being deactivated.
-			} else {
-				// This button is being activated.
-			}	
-		};
-
-
-		/*
 		 * Updates the graph's timescale and thus the surveys that are in scope. 
 		 */
 		Me.UpdtTimeScale = function(inpEvent) {
@@ -81,17 +70,50 @@ if (GraphBuilder) {
 
 
 		/*
+		 * Displays or hides a given category in the graph.
+		 */
+		Me.ToggleTimeseriesCategory = function(inpEvent) {
+			var clickedScoreBtn = jQuery(inpEvent.target);
+			var categoryId = clickedScoreBtn.data("categoryId");
+
+		    var timeseriesLn = d3.select("#chartLn" + CATEGORY_TYPS[categoryId]);
+
+		    // Toggle the timeseries line on or off. 
+		    if (timeseriesLn.empty()) {
+	            drawTimeseriesCategory(categoryId);
+	            clickedScoreBtn.addClass("active");
+		    } else { 
+		        timeseriesLn.remove();
+		        // This makes sure we also clean up any tooltip text, which exists independently of the timeseriesLn object.
+		        jQuery("text." + CATEGORY_TYPS[categoryId]).remove();
+		        clickedScoreBtn.removeClass("active");
+		    }
+		};
+
+
+		/*
 		 * Opens the requested survey.
 		 */
-		Me.OpenSurvey = function(inpEvent) {
+		Me.ToggleSurveyDispl = function(inpEvent, inpSurveyId, inpSelectingInd) {
 
-			var slctedSurveyRow = jQuery(inpEvent.target).parent();
-			
-			// Retrieve this survey.
-			var surveyId = slctedSurveyRow.data("surveyid");
+			var slctedSurveyRow
+			   ,surveyId
+			   ,selectingInd;
+
+			if (inpEvent) {
+				slctedSurveyRow = jQuery(inpEvent.target).parent();
+				surveyId = slctedSurveyRow.data("surveyid");
+				selectingInd = true;
+			} else {
+				surveyId = inpSurveyId;
+				slctedSurveyRow = jQuery('tr[data-surveyid="' + surveyId + '"]');
+				selectingInd = inpSelectingInd;
+			}
+
 			var idx = 0;
 			var surveyObj = null;
 
+			// Retrieve this survey.
 			while (idx < mSurveysToDispl.length && surveyObj == null) {
 				surveyObj = mSurveysToDispl[idx];
 
@@ -103,14 +125,16 @@ if (GraphBuilder) {
 				}
 			}
 
-			if (slctedSurveyRow.hasClass("selected")) {
-				// This survey is already selected, so the user wants to close it.
+			if (slctedSurveyRow.hasClass("selected") && selectingInd == false) {
+				// The user wants to close this survey.
 				slctedSurveyRow.removeClass("selected");
 				
 				jQuery("#msgDisplCntnr").css("visibility", "hidden");
 
+			} else if (slctedSurveyRow.hasClass("selected") && selectingInd == true) {
+				// The user is selecting the same survey again, so we don't have to do anything.
 			} else {
-				// This button is being selected. Removed the "selected" class from all other rows and 
+				// This survey is being selected. Removed the "selected" class from all other rows and 
 				slctedSurveyRow.parent().children().removeClass("selected");
 
 				// Highlight the selected survey and display its information.
@@ -143,28 +167,6 @@ if (GraphBuilder) {
 				jQuery("#scrRec td:last-child").text(surveyObj.RecommendationNbr);
 
 				jQuery("#msgDisplCntnr").css("visibility", "visible");
-
-				/*
-				var msgDisplHtmlTxt = '<table><tr><td>Customer:</td><td>' + surveyObj.CustGenderTxt + '</td></tr>';
-				msgDisplHtmlTxt += '<tr><td>Date:</td><td>' + tsTxt + '</td></tr>';
-				msgDisplHtmlTxt += '<tr><td>Items:</td><td>' + purchasedItmsTxt + '</td></tr>';
-
-				msgDisplHtmlTxt += '<table><'
-				*/
-
-				/*
-				var msgDisplHtmlTxt = '<div id="paraCntnr"><p class="section">Customer:' + SPACE_2 + '<span>' + surveyObj.CustGenderTxt + '</span></p>';
-				msgDisplHtmlTxt += '<p class="section">Items:' + SPACE_2 + '<span>' + purchasedItmsTxt + '</span></p>';
-				msgDisplHtmlTxt += '<p id="scoresPara" class="section">Scores:</p>';
-				msgDisplHtmlTxt += '<table><tr><td>Overall:</td><td>' + surveyObj.OverallSatisfactionNbr + '</td></tr>';
-				msgDisplHtmlTxt += '<tr><td>Food:</td><td>' + surveyObj.FoodSatisfactionNbr + '</td></tr>';
-				msgDisplHtmlTxt += '<tr><td>Service:</td><td>' + surveyObj.ServiceSatisfactionNbr + '</td></tr>';
-				msgDisplHtmlTxt += '<tr><td>Cleanliness:</td><td>' + surveyObj.CleanlinessNbr + '</td></tr>';
-				msgDisplHtmlTxt += '<tr><td>Recommend:</td><td>' + surveyObj.RecommendationNbr + '</td></tr></table>';
-				msgDisplHtmlTxt += '<p class="section">Comments:' + SPACE_2 + '<span>' + surveyObj.CommentsTxt + '</span></p></div>';
-
-				msgDisplCntnr.append(msgDisplHtmlTxt);
-				*/
 			}	
 		}
 
@@ -175,11 +177,17 @@ if (GraphBuilder) {
 		*/
 
 		var setDynamicStyles = function() {
-			var btn = jQuery(".scoreBtn");
-			var hghtNbr = btn.height();
+			var btns = jQuery(".scoreBtn");
+			var hghtNbr = btns.height();
 
-			btn.css("width", hghtNbr);
-			btn.css("font-size", Math.round(hghtNbr * 0.8));
+			btns.css("width", hghtNbr);
+			btns.css("font-size", Math.round(hghtNbr * 0.8));
+
+			jQuery("#overallSatisfactionBtn").data("categoryId", OVERALL_SATISFACTION_NBR);
+			jQuery("#foodSatisfactionBtn").data("categoryId", FOOD_SATISFACTION_NBR);
+			jQuery("#serviceSatisfactionBtn").data("categoryId", SERVICE_SATISFACTION_NBR);
+			jQuery("#cleanlinessBtn").data("categoryId", CLEANLINESS_NBR);
+			jQuery("#recommendationBtn").data("categoryId", RECOMMENDATION_NBR);
 		};
 
 
@@ -202,9 +210,7 @@ if (GraphBuilder) {
 				success: function(inpSurveysJSONDatObj) {
 					mSurveysJSONArray = inpSurveysJSONDatObj.data;
 
-					bldGraph(DAY, new Date("2013-04-16 00:00:00"));
-
-					//updtSurveyLogDispl();
+					bldGraph(DAY);
 				},
 				error: function(inpError) { 
 					console.log(inpError.message);
@@ -216,93 +222,90 @@ if (GraphBuilder) {
 		/*
 		* Builds the page's graph element.
 		*/
-		var bldGraph = function (inpTimeDomain, inpStartDate) {
+		var bldGraph = function (inpTimeDomain) {
 
 			//Create an svg element for this graph.
 			var svgIdTxt = "svgGraph";
 			var graphCntnrHgtNbr = jQuery("#graphCntnr").height();
 			var graphCntnrWdthNbr = jQuery("#graphCntnr").width();
 
-			var margin = 20;
-
-			var svg = d3.select("#graphCntnr").append("svg")
-						.attr("id", svgIdTxt);
-
-
-    		// Construct an ordinal scale with 10 categorical colors, and assign our score categories to these color
-    		// colors.
-    		var colorScale = d3.scale.category10();
-    		colorScale.domain(CATEGORY_TYPS);
-
-    		// Using the current domain array, call its map() function to create a new array with the result of
-    		// the function call for each element in the original array. 
-    		var categories = colorScale.domain().map(function(inpCategoryTyp) {
-    			return {
-    				typ: inpCategoryTyp,
-    				// Store off values from each survey in our original JSON.
-    				values: mSurveysJSONArray.map(function(inpSurvey) {
-    					return {date: new Date(inpSurvey[TRANSACTION_TS]), score: inpSurvey[inpCategoryTyp]};
-    				})
-    			};
-    		});
+			// set up the viewport, the scales, and axis generators 
+		    var container_dimensions = { 
+		        	width: jQuery("#graphCntnr").width(), 
+		        	height: jQuery("#graphCntnr").height()
+		    	}
+		    ,margins = { 
+		        top: 20, 
+		        right: 20, 
+		        bottom: 40, 
+		        left: 40 
+		    }
+		    ,chart_dimensions = { 
+		        width: container_dimensions.width - margins.left - margins.right, 
+		        height: container_dimensions.height - margins.top - margins.bottom 
+		    }; 
 
 
-    		// Calculate our x-axis scale based upon the chose time scale.
-			var endDate = moment(inpStartDate);
-			var domainStartNbr, domainEndNbr, tickIntervalTyp, timeFormat, xAxisLblTxt;
+    		// Calculate our x-axis scale based upon the chosen time scale.
+			var tickIntervalTyp, tmIntervalTyp, timeFormat, xAxisLblTxt;
 			switch (inpTimeDomain) {
 				case WEEK:
-					endDate = endDate.add("weeks", 1);
+					tmIntervalTyp = d3.time.day;
 					tickIntervalTyp = d3.time.days;
 					timeFormat = d3.time.format("%a");
 					xAxisLblTxt = "Day";
 					break;
 				case MONTH:
-					endDate = endDate.add("months", 1);
+					tmIntervalTyp = d3.time.week;
 					tickIntervalTyp = d3.time.weeks;
 					timeFormat = d3.time.format("%m/%d/%Y");
 					xAxisLblTxt = "Week";
 					break;
 				case YEAR:
-					endDate = endDate.add("years", 1);
+					tmIntervalTyp = d3.time.year;
 					tickIntervalTyp = d3.time.months;
 					timeFormat = d3.time.format("%m");
 					xAxisLblTxt = "Month";
 					break;
 				default:
-					endDate = endDate.add("days", 1);
-					domainStartNbr = 0;
-					domainEndNbr = 24;
+					tmIntervalTyp = d3.time.hour;
 					tickIntervalTyp = d3.time.hours;
 					timeFormat = d3.time.format("%H");
 					xAxisLblTxt = "Hour";
 					break;
 			}
 
-			var paddingPxlNbr = 30;
+			var transTsArray = [];
 
+			for (var idx = 0; idx < mSurveysJSONArray.length; idx++) {
+				transTsArray.push(parseDate(mSurveysJSONArray[idx][TRANSACTION_TS]));
+			}
 
-    		var xScale = d3.time.scale()			
-						   .domain([domainStartNbr, domainEndNbr])
-						   .range([paddingPxlNbr, graphCntnrWdthNbr - (paddingPxlNbr * 2)]);
+			var minDate = d3.min(transTsArray);
+			var maxDate = d3.max(transTsArray);
 
-			var yLScale = d3.scale.ordinal()
-						    .domain([0, 10])
-						    .range([graphCntnrHgtNbr - paddingPxlNbr, paddingPxlNbr]);
+    		mXScale = d3.time.scale()			
+						.domain([minDate, maxDate])
+						.range([0, chart_dimensions.width])
+						.nice(tmIntervalTyp);
+
+			mYLScale = d3.scale.linear()
+						 .domain([0, 10])
+						 .range([chart_dimensions.height, 0]);
 
 			var yRScale = d3.scale.linear()
 							.domain([0, 100])
-							.range([graphCntnrHgtNbr - paddingPxlNbr, paddingPxlNbr]);
+							.range([chart_dimensions.height, 0]);
 
 			var xAxis = d3.svg.axis()
-    					  .scale(xScale)
+    					  .scale(mXScale)
     					  .orient("bottom")
     					  .tickSize(3, 3, 0)
     					  .ticks(tickIntervalTyp, 1)
     					  .tickFormat(timeFormat);
 
 			var yLAxis = d3.svg.axis()
-    					   .scale(yLScale)
+    					   .scale(mYLScale)
     					   .orient("left")
     					   .tickSize(3, 3, 0);
 
@@ -310,67 +313,37 @@ if (GraphBuilder) {
     					   .scale(yRScale)
     					   .orient("right");
 
-    		var line = d3.svg.line()
-    					 .interpolate("basis")
-    					 .x(function(inpCategorySurveyVal) {
-    					 	return xScale(inpCategorySurveyVal.date.getHours()); 
-    					 })
-    					 .y(function(inpCategorySurveyVal) {
-    					 	return yLScale(inpCategorySurveyVal.score);
-    					 });
-
-    		var yTranslationNbr = graphCntnrHgtNbr - paddingPxlNbr;
+			var svg = d3.select("#graphCntnr").append("svg")
+											  .attr("id", svgIdTxt)
+											  .attr("width", container_dimensions.width) 
+        									  .attr("height", container_dimensions.height) 
+       										  .append("g") 
+        									  .attr("transform", "translate(" + margins.left + "," + margins.top + ")") 
+        									  .attr("id", "chart");
 
     		svg.append("g")
     		   .attr("class", "axis")
-    		   <!--Move the axis to the bottom and to the right.-->
-    		   .attr("transform", "translate(0," + yTranslationNbr + ")")
+    		   //Move the axis to the bottom and to the right.
+    		   .attr("transform", "translate(0," + chart_dimensions.height + ")")
     		   .call(xAxis)
     		   .append("text")
-    		   .attr("x", ((graphCntnrWdthNbr - paddingPxlNbr) / 2))
-    		   .attr("y", paddingPxlNbr/1.1)
+    		   .attr("transform", "translate(0," + -chart_dimensions.height + ")")
+    		   // Translate back to original position for ease of next translation.
+    		   .attr("x", chart_dimensions.width / 2)
+    		   .attr("y", chart_dimensions.height + (margins.bottom * .9))
     		   .style("text-anchor", "middle")
     		   .text(xAxisLblTxt);
 
 			svg.append("g")
       		   .attr("class", "axis")
-      		   .attr("transform", "translate(" + paddingPxlNbr + ",0)")
       		   .call(yLAxis)
     		   .append("text")
-    		   .attr("transform", "translate(" + -paddingPxlNbr/2 + "," + yTranslationNbr/2 + ") " + "rotate(-90)")
-    		   .attr("x", 0)
-    		   .attr("y", 0)
+    		   .attr("transform", "translate(" + -(margins.left * .7) + "," + chart_dimensions.height/2 + ") " + "rotate(-90)")
       		   .style("text-anchor", "middle")
       		   .text("Score");
 
-		    var category = svg.selectAll(".category")
-      						  .data(categories)
-    						  .enter()
-    						  .append("g")
-    						  .attr("class", "category");
-    						  /*
-    						  .attr("cx", function(inpCategory) {
-    						  		return inpCategory[0];
-    						  })
-    						  .attr("cy", function(inpCategory) {
-    						  		return	inpCategory[1];
-    						  })
-    						  .attr("r", 3)
-      						  .attr("class", "category");
-      						  */
-
-      		category.append("path")
-      				.attr("class", "line")
-      				.attr("d", function(inpCategory) {
-      					return line(inpCategory.values);
-      				})
-      				.style("stroke", function(inpCategory) {
-      					return colorScale(inpCategory.typ);
-      				});
-
-
       		// Update the buttons that display median scores.
-      		updtBtnData(categories);
+      		updtBtnData(mSurveysJSONArray);
 
       		// Update the survey log.
       		updtSurveyLogDispl();
@@ -381,25 +354,32 @@ if (GraphBuilder) {
 		/*
 		 * Updates the data displayed in the top buttons.
 		 */
-		var updtBtnData = function(inpSurveysByCategory) {
+		var updtBtnData = function(inpSurveys) {
 
-			var medianScoresByCategory = new Array();
-			var categoryTyp;
+			var categorySurveyScores = []
+			   ,currSurvey
+			   ,categoryNbr
+			   ,categoryTypTxt;
 
-			for (var catIdx = 0; catIdx < inpSurveysByCategory.length; catIdx++) {
-				var categorySurveyScores = new Array();
-				for (var surveyIdx = 0; surveyIdx < inpSurveysByCategory[catIdx].values.length; surveyIdx++) {
-					categorySurveyScores.push(inpSurveysByCategory[catIdx].values[surveyIdx].score);
-					categoryTyp = inpSurveysByCategory[catIdx].typ;
+			for (var surveyIdx = 0; surveyIdx < inpSurveys.length; surveyIdx++) {
+				currSurvey = inpSurveys[surveyIdx];
+				for (categoryNbr in CATEGORY_TYPS) {
+					categoryTypTxt = categoryNbr.toString();
+
+					if (categorySurveyScores[categoryTypTxt]) {
+						// This category's inner array already exists.
+					} else {
+						categorySurveyScores[categoryTypTxt] = [];
+					}
+
+					categorySurveyScores[categoryTypTxt].push(currSurvey[categoryNbr]);
 				}
-
-				medianScoresByCategory[categoryTyp] = Math.round(d3.median(categorySurveyScores));
 			}
 
-			for (var categoryTyp in medianScoresByCategory) {
-				var medianScoreNbr = medianScoresByCategory[categoryTyp];
+			for (categoryTypTxt in categorySurveyScores) {
+				var medianScoreNbr = Math.round(d3.median(categorySurveyScores[categoryTypTxt]));
 
-				switch (parseInt(categoryTyp)) {
+				switch (parseInt(categoryTypTxt)) {
 					case OVERALL_SATISFACTION_NBR:
 						jQuery("#overallSatisfactionBtn").text(medianScoreNbr);
 						break;
@@ -413,7 +393,7 @@ if (GraphBuilder) {
 						jQuery("#cleanlinessBtn").text(medianScoreNbr);
 						break;
 					case RECOMMENDATION_NBR:
-						jQuery("#recommendationSatisfactionBtn").text(medianScoreNbr);
+						jQuery("#recommendationBtn").text(medianScoreNbr);
 				}
 			}
 		};
@@ -430,7 +410,7 @@ if (GraphBuilder) {
 			// Add any new surveys retrieved from the server that also require review.
 			var jsonSurveysToCreateObjsFor = mSurveysJSONArray.filter(reviewRequiredForSurvey);
 
-			var newSurveyObjsForReview = new Array();
+			var newSurveyObjsForReview = [];
 
 			for (var idx = 0; idx < jsonSurveysToCreateObjsFor.length; idx++) {
 				newSurveyObjsForReview.push(crteSurveyObjForReview(jsonSurveysToCreateObjsFor[idx]));
@@ -461,7 +441,7 @@ if (GraphBuilder) {
 
 			for (var idx = 0; idx < mSurveysToDispl.length; idx++) {
 				var currSurvey = mSurveysToDispl[idx];
-				var tblRowHtmlTxt = '<tr data-surveyid=' + currSurvey.Id + ' onClick="GraphBuilder.OpenSurvey(event)"';
+				var tblRowHtmlTxt = '<tr data-surveyid=' + currSurvey.Id + ' onClick="GraphBuilder.ToggleSurveyDispl(event)"';
 
 				// If this survey needs to be reviewed, mark it with Bootstrap's error class.
 				if (currSurvey.MatchesReviewRulesInd == true && currSurvey.ReviewedInd == false) {
@@ -584,6 +564,152 @@ if (GraphBuilder) {
 			}
 
 			return rtnInd;
+		};
+
+
+		/*
+		 * Draws a given timeseries category.
+		 */
+		var drawTimeseriesCategory = function(inpCategoryId) { 
+  
+		    var categoryVals = [];
+
+	    	// Gather the value of this category from each of the surveys.
+	    	for (var surveysIdx = 0; surveysIdx < mSurveysJSONArray.length; surveysIdx++) {
+	    		categoryVals.push( {
+	    							transTs: mSurveysJSONArray[surveysIdx][TRANSACTION_TS],
+	    							score: mSurveysJSONArray[surveysIdx][inpCategoryId],
+	    							categoryTxt: CATEGORY_TYPS[inpCategoryId],
+	    							surveyId: mSurveysJSONArray[surveysIdx][SURVEY_ID]
+	    						   }
+	    						 );
+	    	}
+
+	    	// clean up the dates 
+		    categoryVals.forEach(function(inpDatum) { 
+		        inpDatum.transTs = parseDate(inpDatum.transTs); 
+		    }); 
+		  
+		    var line = d3.svg.line() 
+		        .x(function(inpEntry) { return mXScale(inpEntry.transTs); }) 
+		        .y(function(inpEntry) { return mYLScale(inpEntry.score); }) 
+		       .interpolate("linear"); 
+		  
+		    var g = d3.select("#chart") 
+		        .append("g") 
+		        .attr("id", "chartLn" + CATEGORY_TYPS[inpCategoryId]) 
+		        .attr("class", "timeseries " + CATEGORY_TYPS[inpCategoryId]); 
+		  
+		  	// Add the line's path and its description.
+		    g.append('path') 
+		        .attr('d', line(categoryVals)); 
+		  
+		  	// Add a circle at the intersection of each survey's submission timestamp and score for this category.
+		    g.selectAll("circle") 
+		        .data(categoryVals) 
+		        .enter() 
+		        .append("circle") 
+		        .attr("cx", function(inpEntry) { 
+		        	return mXScale(inpEntry.transTs); 
+		    	}) 
+		        .attr("cy", function(inpEntry) { 
+		        	return mYLScale(inpEntry.score); 
+		   		 }) 
+		        .attr("r", ORIG_CIRCLE_RAD_NBR) // Sets the radius of the circle.
+		        .attr("data-surveyid", function(inpEntry) {
+		        	return inpEntry.surveyId;
+		        })
+		  		.attr("data-categorytxt", function(inpEntry) {
+		  			return inpEntry.categoryTxt;
+		  		})
+		  		.attr("data-slctdind", "N");
+
+		  	/* Adds a delay to the drawing of each survey data point. Drawing it from a radius of 0 to 5.
+		    var enter_duration = 1000; 
+		  
+		    g.selectAll('circle')
+		     .transition() 
+		     .delay(function(d, i) { 
+		    	return i / data.length * enter_duration; 
+		     })
+		     .attr('r', 5) // Defines the final radius size of each circle.
+		     .each('end', function(d, i) { 
+		    	if (i === data.length - 1) { 
+		            add_label(this, d); 
+		        } 
+		    });
+		    */
+		  
+			// When the user mouses over a circle, grow it. When he mouses out, shrink it back down to original size.
+		    g.selectAll("circle") 
+		     .on("mouseover", function() { 
+		     		d3.select(this)
+		     		  .transition()
+		     		  .attr("r", BIG_CIRCLE_RAD_NBR); 
+		     }) 
+		     .on("mouseout", function(inpCircle, inpIdxOfCircle) {
+		     		if (d3.select(this).attr("data-slctdind") == "N") {
+		     			// If this circle is not currently selected, we can shrink this circle back down.
+		     			d3.select(this).transition().attr("r", ORIG_CIRCLE_RAD_NBR);
+		     		}
+		    })
+		     // When a user mouses over a circle, add a tooltip that displays the category score for this survey.
+		     .on("mouseover.tooltip", function(inpCircle) { 
+			     	//d3.select("text." + inpCircle.categoryTxt).remove(); 
+			        d3.select("#chart") 
+			            .append("text") 
+			            .text(inpCircle.score) 
+			            .attr("x", mXScale(inpCircle.transTs)) 
+			            .attr("y", mYLScale(inpCircle.score) - 10) 
+			            .attr("class", inpCircle.categoryTxt)
+			            .attr("data-surveyid", inpCircle.surveyId)
+			            .attr("data-categorytxt", inpCircle.categoryTxt)
+			            .attr("data-slctdind", "N");
+		     }) 
+		     .on("mouseout.tooltip", function(inpCircle) {
+		     		if (d3.selectAll('text[data-surveyid="' + inpCircle.surveyId + '"]').filter('text[data-categorytxt="' + inpCircle.categoryTxt + '"]').attr("data-slctdind") == "N") {
+
+		     			var tooltipForSurveyAndCategory = d3.selectAll('text[data-surveyid="' + inpCircle.surveyId + '"]').filter('text[data-categorytxt="' + inpCircle.categoryTxt + '"]');
+
+     					tooltipForSurveyAndCategory.transition()
+     							  				   .duration(200) 
+    			  				  				   .style('opacity', 0)
+     			  				  				   .remove();
+		     		}
+		     })
+		     // When a user clicks on a circle, open its corresponding survey in the display area.
+		     .on("click", function(inpCircle) {
+		     		var selectingInd;
+
+		     		if (d3.selectAll('circle[data-surveyid="' + inpCircle.surveyId + '"]').filter('circle[data-categorytxt="' + inpCircle.categoryTxt + '"]').attr("data-slctdind") == "Y") {
+		     			// The user is de-selecting this survey.
+		     			selectingInd = false;
+
+		     			d3.selectAll('text[data-surveyid="' + inpCircle.surveyId + '"]').filter('text[data-categorytxt="' + inpCircle.categoryTxt + '"]').attr("data-slctdind", "N");
+		     			d3.selectAll('circle[data-surveyid="' + inpCircle.surveyId + '"]').filter('circle[data-categorytxt="' + inpCircle.categoryTxt + '"]').attr("data-slctdind", "N");
+		     		} else {
+		     			// The user is selecting this survey.
+		     			selectingInd = true;
+
+		     			// First "de-select" all circles and tooltips, and then "re-select" the ones we want to keep.
+		     			d3.selectAll("text[data-surveyid]").attr("data-slctdind", "N");
+		     			d3.selectAll("circle").attr("data-slctdind", "N");
+
+		     			d3.selectAll('text[data-surveyid="' + inpCircle.surveyId + '"]').filter('text[data-categorytxt="' + inpCircle.categoryTxt + '"]').attr("data-slctdind", "Y");
+		     			d3.selectAll('circle[data-surveyid="' + inpCircle.surveyId + '"]').filter('circle[data-categorytxt="' + inpCircle.categoryTxt + '"]').attr("data-slctdind", "Y");
+		     		}
+
+		     		d3.selectAll('text[data-slctdind="N"]')
+		     			  .transition()
+     					  .duration(200) 
+    			  		  .style('opacity', 0)
+     			  		  .remove();
+
+     			  	d3.selectAll('circle[data-slctdind="N"]').transition().attr("r", ORIG_CIRCLE_RAD_NBR);
+
+		     		// Open or close the survey in the display area.
+		     		GraphBuilder.ToggleSurveyDispl(null, inpCircle.surveyId, selectingInd);
+		     });
 		};
 	};
 }	

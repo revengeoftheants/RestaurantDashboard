@@ -9,6 +9,11 @@ html, body {
 	color: #333333;
 }
 
+path { 
+	/* Prevents our timeseries lines from being filled above and below an otherwise invisible trend line. */
+    fill: none; 
+} 
+
 #leftMargin,
 #centerCol,
 #rightMargin {
@@ -53,7 +58,7 @@ html, body {
 	height: 15%;
 	width: 100%;
 	margin-top: 1%;
-	margin-bottom: 1%;
+	margin-bottom: 2%;
 }
 
 
@@ -183,6 +188,42 @@ html, body {
 }
 
 
+.Food { 
+	font-size: 140%;
+	stroke: Red; 
+	fill: Red; 
+	background-color: Red; 
+}    
+ 
+.Service {
+	font-size: 140%;
+	stroke: Blue; 
+	fill: Blue; 
+	background-color: Blue; 
+}  
+ 
+.Overall { 
+	font-size: 140%;
+	stroke: Green; 
+	fill: Green; 
+	background-color: Green; 
+}  
+ 
+.Clean {
+	font-size: 140%;
+	stroke: Orange; 
+	fill: Orange; 
+	background-color: Orange; 
+}  
+ 
+.Rec {
+	font-size: 140%;
+	stroke: Purple; 
+	fill: Purple; 
+	background-color: Purple; 
+}
+
+
 .caret {
 	border-top: 4px solid #555555; /*Sets the carat's color.*/
 }
@@ -233,7 +274,7 @@ html, body {
 
 
 .axis text {
-    font-size: 100%;
+    font-size: 120%;
     color: #E3E3E3;
 }
 
